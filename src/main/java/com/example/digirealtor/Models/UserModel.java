@@ -24,6 +24,6 @@ public class UserModel {
     @JsonIgnore
     private String password;
     private Date createdAt;
-    private boolean emailVerified=false;
+    private Boolean emailVerified=false;
     
 }
