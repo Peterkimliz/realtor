@@ -34,21 +34,22 @@ public class WebSecurity {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
 
         return
-                httpSecurity
-                        .csrf(csrf -> csrf
-                                .disable())
-                        .authorizeHttpRequests()
-                        .requestMatchers("/api/auth/**")
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated()
-                        .and()
-                        .sessionManagement(management -> management
-                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                        .authenticationProvider(authenticationProvider())
-                        .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-
-                        .build();
+                 httpSecurity
+                 .csrf()
+                 .disable()
+                 .authorizeHttpRequests()
+                 .requestMatchers("/api/auth/**")
+                 .permitAll()
+                 .anyRequest()
+                 .authenticated()
+                 .and()
+                 .sessionManagement()
+                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                 .and()
+                 .authenticationProvider(authenticationProvider())
+                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                 
+                  .build();
     }
 
 
