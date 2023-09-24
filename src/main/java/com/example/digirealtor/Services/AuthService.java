@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.digirealtor.Dtos.LoginRequest;
 import com.example.digirealtor.Dtos.LoginResponse;
 import com.example.digirealtor.Dtos.SigninRequests;
 import com.example.digirealtor.Dtos.UserResponse;
@@ -50,24 +51,13 @@ public class AuthService {
 
     }
 
-     public LoginResponse LoginUser(SigninRequests signinRequests) {
-        Optional<UserModel> foundUser = userRepository.findByEmail(signinRequests.getEmail());
-        if (foundUser.isPresent()) {
-            throw new FoundException("User with email address already exists");
-        }
-        UserModel userModel = UserModel.builder()
-                .createdAt(new Date(System.currentTimeMillis()))
-                .email(signinRequests.getEmail())
-                .fullName(signinRequests.getUsername())
-                .phone(signinRequests.getPhone())
-                .password(passwordEncoder.encode(signinRequests.getPassword())).build();
+     public LoginResponse LoginUser(LoginRequest loginRequest) {
 
-        userRepository.save(userModel);
 
-        LoginResponse loginResponse = buildLoginResponse(userModel);
+        // LoginResponse loginResponse = buildLoginResponse(userModel);
 
-        return loginResponse;
-
+        // return loginResponse;
+       return null;
     }
     
 

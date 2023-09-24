@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.digirealtor.Dtos.LoginRequest;
 import com.example.digirealtor.Dtos.LoginResponse;
 import com.example.digirealtor.Dtos.SigninRequests;
 import com.example.digirealtor.Services.AuthService;
@@ -26,8 +27,8 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<LoginResponse> signInUser(@RequestBody SigninRequests signinRequests){
-        return new ResponseEntity<LoginResponse>(authService.createUser(signinRequests),HttpStatus.CREATED);
+    public ResponseEntity<LoginResponse> signInUser(@RequestBody LoginRequest loginRequest){
+        return new ResponseEntity<LoginResponse>(authService.LoginUser(loginRequest),HttpStatus.OK);
     }
 
     
