@@ -12,6 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 @Document(collection = "users")
 
 public class UserModel {
