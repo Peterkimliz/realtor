@@ -41,7 +41,7 @@ public class AuthService {
                 .email(signinRequests.getEmail())
                 .fullName(signinRequests.getUsername())
                 .phone(signinRequests.getPhone())
-                .password(passwordEncoder.encode(signinRequests.getPassword())).build();
+                .password(passwordEncoder.encode(signinRequests.getPassword())).emailVerified(false).build();
 
         userRepository.save(userModel);
 
