@@ -1,9 +1,10 @@
 package com.example.digirealtor.Security;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
-import org.apache.catalina.mbeans.UserMBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,10 +20,13 @@ public class UserDetailsImplementation implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        
-        UserModel foundUser=userRepository.findByEmail(username).get();
-       
-        throw new UnsupportedOperationException("Unimplemented method 'loadUserByUsername'");
+        Optional< UserModel> foundUser=userRepository.findByEmail(username);
+        if(foundUser.isPresent()){
+          return  new User(foundUser.get().getEmail(),foundUser.get().getPassword(),new ArrayList<>());
+        }else{
+            throw new UsernameNotFoundException("User not found");
+        }
+
     }
 
 }
