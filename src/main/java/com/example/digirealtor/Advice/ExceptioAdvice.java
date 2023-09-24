@@ -11,6 +11,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.example.digirealtor.Exceptions.ExceptionObject;
 import com.example.digirealtor.Exceptions.FoundException;
+import com.example.digirealtor.Exceptions.JwtExceptionObject;
+import com.example.digirealtor.Exceptions.NotFoundException;
+
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
 
 @RestControllerAdvice
 public class ExceptioAdvice {
@@ -32,7 +38,36 @@ public class ExceptioAdvice {
   public ResponseEntity<ExceptionObject> foundException(FoundException exception){
     ExceptionObject exceptionObject=new ExceptionObject();
     exceptionObject.setMessage(exception.getMessage());
-    return new ResponseEntity<ExceptionObject>(exceptionObject,HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<ExceptionObject>(exceptionObject,HttpStatus.CONFLICT);
+  }
+  @ExceptionHandler(NotFoundException.class)  
+  public ResponseEntity<ExceptionObject> notFoundException(NotFoundException exception){
+    ExceptionObject exceptionObject=new ExceptionObject();
+    exceptionObject.setMessage(exception.getMessage());
+    return new ResponseEntity<ExceptionObject>(exceptionObject,HttpStatus.NOT_FOUND);
+  }
+
+
+  @ExceptionHandler(ExpiredJwtException.class)  
+  public ResponseEntity<JwtExceptionObject> expiredToken(ExpiredJwtException exception){
+    JwtExceptionObject exceptionObject=new JwtExceptionObject();
+    exceptionObject.setMessage(exception.getMessage());
+    exceptionObject.setReason("jwt Already expired");
+    return new ResponseEntity<JwtExceptionObject>(exceptionObject,HttpStatus.FORBIDDEN);
+  }
+  @ExceptionHandler(SignatureException.class)  
+  public ResponseEntity<JwtExceptionObject> inValidToken(SignatureException exception){
+    JwtExceptionObject exceptionObject=new JwtExceptionObject();
+    exceptionObject.setMessage(exception.getMessage());
+    exceptionObject.setReason("Invalid token");
+    return new ResponseEntity<JwtExceptionObject>(exceptionObject,HttpStatus.FORBIDDEN);
+  }
+  @ExceptionHandler(MalformedJwtException.class)  
+  public ResponseEntity<JwtExceptionObject> malformedJwtException(MalformedJwtException exception){
+    JwtExceptionObject exceptionObject=new JwtExceptionObject();
+    exceptionObject.setMessage(exception.getMessage());
+    exceptionObject.setReason("Invalid token");
+    return new ResponseEntity<JwtExceptionObject>(exceptionObject,HttpStatus.FORBIDDEN);
   }
 
     
