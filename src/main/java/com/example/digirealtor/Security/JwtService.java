@@ -19,6 +19,7 @@ public class JwtService {
 
     // method to extract username
     public String extractUserName(String token) {
+        System.out.println("hello"+token);
         return extractSingleClaim(token, Claims::getSubject);
     }
 
@@ -55,13 +56,12 @@ public class JwtService {
     // method to build the token
     public String buildToken(UserDetails userDetails, Map<String,Object> claims) {
         return Jwts
-                .builder()
-                .setSubject(userDetails.getUsername())
+                .builder() 
                 .setClaims(claims)
+                .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000*60*24))
                 .signWith(SignatureAlgorithm.HS256, SECRET_STRING)
-         
                 .compact();
 
     }

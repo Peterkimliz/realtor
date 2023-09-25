@@ -1,5 +1,6 @@
 package com.example.digirealtor.Services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,12 @@ public class UserService {
                 .build();
         return userResponse;
 
+    }
+
+    public List<UserResponse> allUsers(int pageNumber) {
+
+        System.out.println("called");    
+        return null;
     }
 
 }
