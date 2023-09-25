@@ -1,6 +1,6 @@
 package com.example.digirealtor.Security;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -11,68 +11,63 @@ import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-
 @Service
+
 public class JwtService {
 
-    private String SECRET_STRING = "eyJzdWIiOiJwZXRlcmtpcm9uamk4QGdtYWlsLmNvbSIsImV4cCI6MTY4MjY4MDAwOCwiaWF0IjoxNjgyNjc4NTY4fQ";
+    static final String SECRETKEY = "27A7F28FACC32F81B9C93B583C2C3B648374D8786E7D4BBE69FB3CF6055F35827A39347304F9D7124F74FFD8B23AA6C1EBCEE63463803B53EE5244EB0D2D0F45";
 
-    // method to extract username
-    public String extractUserName(String token) {
-        System.out.println("hello"+token);
+    // extract username
+    public String extractUsername(String token) {
         return extractSingleClaim(token, Claims::getSubject);
     }
 
-    // method to extract singleClaim
-    private <T> T extractSingleClaim(String token, Function<Claims, T> claimResolver) {
+    /// extract singleClaim
+    private <T> T extractSingleClaim(String token, Function<Claims, T> claimsResolver) {
         Claims claims = extractAllClaims(token);
-        return claimResolver.apply(claims);
-
+        return claimsResolver.apply(claims);
     }
 
-    /// method to extract all claims from the token
+    // extractAllClaims
     private Claims extractAllClaims(String token) {
         return Jwts
                 .parser()
-                .setSigningKey(SECRET_STRING)
+                .setSigningKey(SECRETKEY)
                 .parseClaimsJwt(token)
                 .getBody();
+    }
+    // generate token without passing claims
 
+    public String buildToken(UserDetails userDetails) {
+        return buildToken(userDetails, new HashMap<>());
     }
 
-    // method to check if token is valid
-    public Boolean isTokenValid(String token, UserDetails userDetails) {
-        String username = extractUserName(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
-
-    }
-
-
-   //method to build token with UserDetails only
-   public String buildToken(UserDetails userDetails){
-    return buildToken(userDetails, new HashMap<String,Object>());
-   }
-
-    // method to build the token
-    public String buildToken(UserDetails userDetails, Map<String,Object> claims) {
+    // generate token
+    public String buildToken(UserDetails userDetails, Map<String, Object> claims) {
         return Jwts
-                .builder() 
+                .builder()
                 .setClaims(claims)
-                .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000*60*24))
-                .signWith(SignatureAlgorithm.HS256, SECRET_STRING)
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .setSubject(userDetails.getUsername())
+                .signWith(SignatureAlgorithm.HS256, SECRETKEY)
                 .compact();
-
     }
 
-    // method to check if the token has expired
-    private boolean isTokenExpired(String token) {
-        return extractTokenExpiration(token).before(new Date(System.currentTimeMillis()));
+    // check if toke n is valid
+    public boolean isTokenValid(UserDetails userDetails, String token) {
+
+        String username = extractUsername(token);
+        return (userDetails.getUsername().equals(username) && !tokenExpired(token));
     }
 
-    // method to extract token expiration date
-    private java.util.Date extractTokenExpiration(String token) {
+    // check if token is expired
+    private boolean tokenExpired(String token) {
+        return extractExpiration(token).before(new Date(System.currentTimeMillis()));
+    }
+    // extract expiration date of a token
+
+    private Date extractExpiration(String token) {
         return extractSingleClaim(token, Claims::getExpiration);
     }
 
