@@ -25,7 +25,7 @@ public class CategoryService {
             throw new FoundException("Category with that name already exists");
         }
         Category category = Category.builder().createdAt(new Date(System.currentTimeMillis()))
-                .name(categoryDto.getName()).build();
+          .name(categoryDto.getName()).type(categoryDto.getType()).build();
         categoryRepository.save(category);
         categoryDto.setId(category.getId());
         return categoryDto;
@@ -47,6 +47,7 @@ public class CategoryService {
         }
         Category category = foundCategory.get();
         category.setName(categoryDto.getName() == null ? category.getName() : categoryDto.getName());
+        category.setType(categoryDto.getType() == null ? category.getType() : categoryDto.getType());
         categoryRepository.save(category);
 
         return CategoryDto.builder().build();
@@ -63,8 +64,9 @@ public class CategoryService {
 
     }
 
-    public List<CategoryDto> getAllCategories() {
-        List<Category> categories = categoryRepository.findAll();
+    public List<CategoryDto> getAllCategories(String type) {
+    
+        List<Category> categories = categoryRepository.findByType(type);
         if (categories.size() > 0) {
             return categories.stream().map(e -> CategoryDto.builder().id(e.getId()).name(e.getName()).build()).toList();
 
