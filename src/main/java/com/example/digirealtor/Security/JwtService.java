@@ -1,5 +1,6 @@
 package com.example.digirealtor.Security;
 
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,11 +12,13 @@ import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 @Service
 
 public class JwtService {
 
-    static final String SECRETKEY = "27A7F28FACC32F81B9C93B583C2C3B648374D8786E7D4BBE69FB3CF6055F35827A39347304F9D7124F74FFD8B23AA6C1EBCEE63463803B53EE5244EB0D2D0F45";
+    static final String SECRETKEY = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
 
     // extract username
     public String extractUsername(String token) {
@@ -30,10 +33,12 @@ public class JwtService {
 
     // extractAllClaims
     private Claims extractAllClaims(String token) {
+          System.out.println("token is "+token);
         return Jwts
-                .parser()
-                .setSigningKey(SECRETKEY)
-                .parseClaimsJwt(token)
+                .parserBuilder()
+                .setSigningKey(getSignInKey())
+                .build()
+                .parseClaimsJws(token)
                 .getBody();
     }
     // generate token without passing claims
@@ -47,17 +52,19 @@ public class JwtService {
         return Jwts
                 .builder()
                 .setClaims(claims)
+                .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
-                .setSubject(userDetails.getUsername())
-                .signWith(SignatureAlgorithm.HS256, SECRETKEY)
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
     // check if toke n is valid
     public boolean isTokenValid(UserDetails userDetails, String token) {
+        System.out.println("called"+token);
 
         String username = extractUsername(token);
+        System.out.println("decoding token"+username);
         return (userDetails.getUsername().equals(username) && !tokenExpired(token));
     }
 
@@ -68,7 +75,13 @@ public class JwtService {
     // extract expiration date of a token
 
     private Date extractExpiration(String token) {
-        return extractSingleClaim(token, Claims::getExpiration);
+       return extractSingleClaim(token, Claims::getExpiration);
     }
+
+    private Key getSignInKey() {
+    byte[] keyBytes = Decoders.BASE64.decode(SECRETKEY);
+    return Keys.hmacShaKeyFor(keyBytes);
+  }
+
 
 }

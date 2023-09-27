@@ -62,13 +62,13 @@ public class ExceptioAdvice {
     exceptionObject.setReason("Invalid token");
     return new ResponseEntity<JwtExceptionObject>(exceptionObject,HttpStatus.FORBIDDEN);
   }
-  @ExceptionHandler(MalformedJwtException.class)  
-  public ResponseEntity<JwtExceptionObject> malformedJwtException(MalformedJwtException exception){
-    JwtExceptionObject exceptionObject=new JwtExceptionObject();
-    exceptionObject.setMessage(exception.getMessage());
-    exceptionObject.setReason("Invalid token");
-    return new ResponseEntity<JwtExceptionObject>(exceptionObject,HttpStatus.FORBIDDEN);
-  }
+  // @ExceptionHandler(MalformedJwtException.class)  
+  // public ResponseEntity<JwtExceptionObject> malformedJwtException(MalformedJwtException exception){
+  //   JwtExceptionObject exceptionObject=new JwtExceptionObject();
+  //   exceptionObject.setMessage(exception.getMessage());
+  //   exceptionObject.setReason("Invalid token");
+  //   return new ResponseEntity<JwtExceptionObject>(exceptionObject,HttpStatus.FORBIDDEN);
+  // }
 
     
 }
