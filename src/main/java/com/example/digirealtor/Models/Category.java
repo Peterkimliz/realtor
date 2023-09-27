@@ -1,6 +1,8 @@
 package com.example.digirealtor.Models;
 
-import java.sql.Date;
+
+
+import java.util.Date;
 
 import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.annotation.Id;

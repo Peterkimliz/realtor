@@ -20,12 +20,12 @@ public class CategoryService {
     CategoryRepository categoryRepository;
 
     public CategoryDto createCategory(CategoryDto categoryDto) {
-        Optional<Category> foundCategory = categoryRepository.findByName(categoryDto.getName());
+        Optional<Category> foundCategory = categoryRepository.findByName(categoryDto.getName().toLowerCase());
         if (foundCategory.isPresent()) {
             throw new FoundException("Category with that name already exists");
         }
         Category category = Category.builder().createdAt(new Date(System.currentTimeMillis()))
-          .name(categoryDto.getName()).type(categoryDto.getType()).build();
+          .name(categoryDto.getName().toLowerCase()).type(categoryDto.getType()).build();
         categoryRepository.save(category);
         categoryDto.setId(category.getId());
         return categoryDto;
@@ -36,7 +36,8 @@ public class CategoryService {
         if (!foundCategory.isPresent()) {
             throw new FoundException("Category not found");
         }
-        return CategoryDto.builder().build();
+        Category category=foundCategory.get();
+        return CategoryDto.builder().id(category.getId()).name(category.getName()).type(category.getType()).build();
 
     }
 
@@ -68,7 +69,7 @@ public class CategoryService {
     
         List<Category> categories = categoryRepository.findByType(type);
         if (categories.size() > 0) {
-            return categories.stream().map(e -> CategoryDto.builder().id(e.getId()).name(e.getName()).build()).toList();
+            return categories.stream().map(e -> CategoryDto.builder().id(e.getId()).name(e.getName()).type(e.getType()).build()).toList();
 
         } else {
             return new ArrayList<>();
