@@ -19,7 +19,10 @@ public class Category {
     private String id;
     @UniqueElements
     private String name;
+      @UniqueElements
+    private String type;
     private Date createdAt;
+
 
     
 }
