@@ -51,7 +51,7 @@ public class CategoryService {
         category.setType(categoryDto.getType() == null ? category.getType() : categoryDto.getType());
         categoryRepository.save(category);
 
-        return CategoryDto.builder().build();
+        return CategoryDto.builder().id(category.getId()).name(category.getName()).type(category.getType()).build();
 
     }
 
