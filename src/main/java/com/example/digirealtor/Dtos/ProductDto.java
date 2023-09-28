@@ -4,7 +4,10 @@ import java.util.List;
 
 import com.example.digirealtor.Models.Category;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,30 +20,38 @@ import lombok.NoArgsConstructor;
 public class ProductDto {
     @NotBlank(message = "name required ")
     private String name;
-      @NotBlank(message = "description required ")
+    @NotBlank(message = "description required ")
     private String description;
-      @NotBlank(message = "price  required ")
+    @NotNull(message = "price required ")
+    @Min(value = 1, message = "please enter valid price")
     private int price;
-      @NotBlank(message = "images required ")
+    @NotEmpty(message = "images required ")
     private List<String> images;
-      @NotBlank(message = "quantity required ")
+    @NotNull(message = "price quantity ")
+    @Min(value = 1, message = "please enter valid quantity")
+    @NotBlank(message = "quantity required ")
     private int quantity;
-      @NotBlank(message = "category required ")
+    @NotBlank(message = "category required ")
     private String category;
-      @NotBlank(message = "number of bedrooms required ")
+    @NotNull(message = "bedRooms required ")
+    @Min(0)
     private int bedRooms;
-      @NotBlank(message = "number of bathrooms required ")
+    @NotNull(message = "bathRooms required ")
+    @Min(0)
     private int bathRooms;
-      @NotBlank(message = "number of bulconies required ")
+    @NotNull(message = "balconies required ")
+    @Min(0)
     private int balconies;
-      @NotBlank(message = "room size required ")
+    @NotNull(message = "room required ")
+    @Min(1)
     private int roomSize;
-      @NotBlank(message = "number of kitchens required ")
+    @NotNull(message = "kitchens required ")
+    @Min(1)
     private int kitchens;
-    private List<Category>amenities;
-     @NotBlank(message = "location required ")
+    private List<Category> amenities;
+    @NotBlank(message = "location required ")
     private String location;
-      @NotBlank(message = "type required ")
+    @NotBlank(message = "type required ")
     private String type;
-    
+
 }

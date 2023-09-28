@@ -18,6 +18,8 @@ import lombok.*;
 public class Product {
     @Id
     private String id;
+    @DocumentReference(lazy = true)
+    private UserModel owner;
     private String name;
     private String description;
     private int price;
