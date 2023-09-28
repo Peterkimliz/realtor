@@ -29,7 +29,6 @@ public class Product {
     private int balconies;
     private int roomSize;
     private int kitchens;
-    
     @DocumentReference(lazy = true)
     private List<Category>amenities;
     private Date createdAt;
