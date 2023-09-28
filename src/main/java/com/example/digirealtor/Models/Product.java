@@ -36,7 +36,7 @@ public class Product {
     private Date createdAt;
     private String location;
     private String type;
-    private boolean featured=false;
+    private boolean featured;
 
     
 }
