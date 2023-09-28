@@ -25,5 +25,6 @@ public class UserModel {
     private String password;
     private Date createdAt;
     private Boolean emailVerified=false;
+
     
 }
