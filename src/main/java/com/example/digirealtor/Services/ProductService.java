@@ -20,13 +20,70 @@ public class ProductService {
     @Autowired
     private UserRepository userRepository;
 
-    public ProductDto createProduct(ProductDto productDto,String ownerId) {
-       Optional<UserModel> user =userRepository.findById(ownerId);
+    public ProductDto createProduct(ProductDto productDto, String ownerId) {
+        Optional<UserModel> user = userRepository.findById(ownerId);
 
-       if(!user.isPresent()){
-        throw new NotFoundException("user with the id not found");
-       }
-       Product product = Product.builder()
+        if (!user.isPresent()) {
+            throw new NotFoundException("user with the id not found");
+        }
+
+        Product product = mapToProduct(productDto, user.get());
+        productRepository.save(product);
+        productDto.setId(product.getId());
+        return productDto;
+    }
+
+    public ProductDto getProductById(String id) {
+        Optional<Product> foundProduct = productRepository.findById(id);
+        if (foundProduct.isPresent()) {
+            throw new NotFoundException("product with the id not found");
+        }
+        return mapProductToDto(foundProduct.get());
+    }
+
+    public ProductDto updateProductById(ProductDto productDto, String id) {
+        Optional<Product> foundProduct = productRepository.findById(id);
+        if (foundProduct.isPresent()) {
+            throw new NotFoundException("product with the id not found");
+        }
+        Product product = mapToProduct(productDto, foundProduct.get().getOwner());
+        productRepository.save(product);
+        return mapProductToDto(product);
+    }
+
+    public void deleteProduct(String id) {
+        Optional<Product> foundProduct = productRepository.findById(id);
+        if (foundProduct.isPresent()) {
+            throw new NotFoundException("product with the id not found");
+        }
+        Product product = foundProduct.get();
+        product.setDeleted(true);
+        productRepository.save(product);
+    }
+
+    private ProductDto mapProductToDto(Product product) {
+        return ProductDto.builder()
+                .amenities(product.getAmenities())
+                .balconies(product.getBalconies())
+                .bathRooms(product.getBathRooms())
+                .bedRooms(product.getBedRooms())
+                .category(product.getCategory())
+                .description(product.getDescription())
+                .id(product.getId())
+                .images(product.getImages())
+                .kitchens(product.getKitchens())
+                .location(product.getLocation())
+                .name(product.getName())
+                .price(product.getPrice())
+                .quantity(product.getQuantity())
+                .roomSize(product.getRoomSize())
+                .type(product.getType())
+
+                .build();
+    }
+
+    private Product mapToProduct(ProductDto productDto, UserModel owner) {
+        return Product.builder()
                 .createdAt(new Date(System.currentTimeMillis()))
                 .amenities(productDto.getAmenities())
                 .balconies(productDto.getBalconies())
@@ -43,12 +100,9 @@ public class ProductService {
                 .quantity(productDto.getQuantity())
                 .type(productDto.getType())
                 .roomSize(productDto.getRoomSize())
-                .owner(user.get())
+                .owner(owner)
+                .deleted(false)
                 .build();
-
-        productRepository.save(product);
-        productDto.setId(product.getId());
-        return productDto;
     }
 
 }
