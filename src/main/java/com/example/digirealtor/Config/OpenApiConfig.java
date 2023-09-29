@@ -23,13 +23,14 @@ import io.swagger.v3.oas.annotations.servers.Server;
     ) 
     ,servers = {
         @Server(
-            description = "Local ENV",
-            url = "http://localhost:8080"
+            description = "Production ENV",
+            url = "https://peterlojisrealtor.onrender.com/"
         ),
         @Server(
-            description = "Production ENV",
+            description = "Local ENV",
             url = "http://localhost:8080"
         )
+        
     },security = {
        @SecurityRequirement(name = "bearerAuth")
     }
