@@ -7,10 +7,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.digirealtor.Controllers.CategoryController;
 import com.example.digirealtor.Dtos.ProductDto;
 import com.example.digirealtor.Exceptions.NotFoundException;
+import com.example.digirealtor.Models.Category;
 import com.example.digirealtor.Models.Product;
 import com.example.digirealtor.Models.UserModel;
+import com.example.digirealtor.Repositories.CategoryRepository;
 import com.example.digirealtor.Repositories.ProductRepository;
 import com.example.digirealtor.Repositories.UserRepository;
 
@@ -20,12 +23,18 @@ public class ProductService {
     private ProductRepository productRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     public ProductDto createProduct(ProductDto productDto, String ownerId) {
         Optional<UserModel> user = userRepository.findById(ownerId);
+        Optional<Category> category = categoryRepository.findById(productDto.getCategory());
 
         if (!user.isPresent()) {
             throw new NotFoundException("user with the id not found");
+        }
+        if (!category.isPresent()) {
+            throw new NotFoundException("category with the id not found");
         }
 
         Product product = mapToProduct(productDto, user.get());
@@ -36,7 +45,7 @@ public class ProductService {
 
     public ProductDto getProductById(String id) {
         Optional<Product> foundProduct = productRepository.findById(id);
-        if (foundProduct.isPresent()) {
+        if (!foundProduct.isPresent()) {
             throw new NotFoundException("product with the id not found");
         }
         return mapProductToDto(foundProduct.get());
