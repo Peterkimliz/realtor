@@ -18,8 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.digirealtor.Dtos.CategoryDto;
 import com.example.digirealtor.Services.CategoryService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/v1/categories")
+@Tag(name = "Categories")
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;

@@ -14,8 +14,11 @@ import com.example.digirealtor.Dtos.LoginResponse;
 import com.example.digirealtor.Dtos.SigninRequests;
 import com.example.digirealtor.Services.AuthService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("api/v1/auth")
+@Tag(name = "Authenticatin")
 public class AuthController {
 
     @Autowired

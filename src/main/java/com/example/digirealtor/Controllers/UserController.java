@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.digirealtor.Dtos.UserResponse;
 import com.example.digirealtor.Services.UserService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("api/v1/users")
+@Tag(name = "Users")
 public class UserController {
     @Autowired
     private UserService userService;

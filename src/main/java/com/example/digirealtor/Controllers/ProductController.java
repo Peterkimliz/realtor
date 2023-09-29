@@ -16,13 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.digirealtor.Dtos.CategoryDto;
 import com.example.digirealtor.Dtos.ProductDto;
-import com.example.digirealtor.Services.CategoryService;
 import com.example.digirealtor.Services.ProductService;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1/products")
+@Tag(name = "Products")
 public class ProductController {
     @Autowired
     private ProductService productService;
