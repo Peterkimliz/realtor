@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import com.example.digirealtor.Dtos.LoginResponse;
 import com.example.digirealtor.Dtos.SigninRequests;
 import com.example.digirealtor.Dtos.UserResponse;
 import com.example.digirealtor.Exceptions.FoundException;
+import com.example.digirealtor.Exceptions.NotFoundException;
 import com.example.digirealtor.Models.UserModel;
 import com.example.digirealtor.Repositories.UserRepository;
 import com.example.digirealtor.Security.JwtService;
@@ -28,6 +31,8 @@ public class AuthService {
     JwtService jwtService;
     @Autowired
     UserDetailsImplementation userDetailsImplementation;
+     @Autowired
+    AuthenticationManager authenticationManager;
 
 
 
@@ -52,12 +57,19 @@ public class AuthService {
     }
 
      public LoginResponse LoginUser(LoginRequest loginRequest) {
-
-
-        // LoginResponse loginResponse = buildLoginResponse(userModel);
-
-        // return loginResponse;
-       return null;
+       
+            try {
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
+                );
+    
+            } catch (Exception e) {
+                System.out.println(e);
+                throw new NotFoundException("invalid email or password");
+            }
+            Optional<UserModel> user = userRepository.findByEmail(loginRequest.getEmail());
+            LoginResponse loginResponse = buildLoginResponse(user.get());
+            return loginResponse;
+    
     }
     
 
