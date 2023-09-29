@@ -37,7 +37,7 @@ public class Product {
     private String location;
     private String type;
     private boolean featured;
-    private boolean deleted;
+    private Boolean deleted;
 
     
 }

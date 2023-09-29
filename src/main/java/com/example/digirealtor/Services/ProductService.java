@@ -53,7 +53,7 @@ public class ProductService {
 
     public ProductDto updateProductById(ProductDto productDto, String id) {
         Optional<Product> foundProduct = productRepository.findById(id);
-        if (foundProduct.isPresent()) {
+        if (!foundProduct.isPresent()) {
             throw new NotFoundException("product with the id not found");
         }
         Product product = mapToProduct(productDto, foundProduct.get().getOwner());
@@ -63,7 +63,7 @@ public class ProductService {
 
     public void deleteProduct(String id) {
         Optional<Product> foundProduct = productRepository.findById(id);
-        if (foundProduct.isPresent()) {
+        if (!foundProduct.isPresent()||!foundProduct.get().getDeleted()==true) {
             throw new NotFoundException("product with the id not found");
         }
         Product product = foundProduct.get();
