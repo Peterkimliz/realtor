@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springdoc.core.converters.models.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.example.digirealtor.Dtos.UserResponse;
@@ -41,7 +44,8 @@ public class UserService {
     }
 
     public List<UserResponse> allUsers(int pageNumber) {
-        List<UserModel> users=userRepository.findAll();
+        PageRequest pageable=PageRequest.of(pageNumber, 15).withSort(Direction.DESC, "CreatedAt");
+        List<UserModel> users=userRepository.findAll(pageable).toList();
         if(users.isEmpty()){
             return new ArrayList<>();
 

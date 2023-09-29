@@ -25,7 +25,7 @@ public class UserController {
         return new ResponseEntity<UserResponse>(userService.getUserById(userId), HttpStatus.OK);
     }
     @GetMapping("/all")
-    public ResponseEntity<List<UserResponse>> getAllUsers(@RequestParam(required = false) int pageNumber) {
+    public ResponseEntity<List<UserResponse>> getAllUsers(@RequestParam(required = true) int pageNumber) {
         return new ResponseEntity<List<UserResponse>>(userService.allUsers(pageNumber), HttpStatus.OK);
     }
 
