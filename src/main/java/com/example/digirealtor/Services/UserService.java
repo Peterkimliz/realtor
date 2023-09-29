@@ -1,5 +1,6 @@
 package com.example.digirealtor.Services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,22 +23,30 @@ public class UserService {
             throw new NotFoundException("User with the id not found");
         }
         UserModel userModel = foundUser.get();
-        UserResponse userResponse = UserResponse.builder()
-                .createdAt(userModel.getCreatedAt())
-                .email(userModel.getEmail())
-                .emailVerified(userModel.getEmailVerified())
-                .fullName(userModel.getFullName())
-                .phone(userModel.getPhone())
-        
-                .build();
+        UserResponse userResponse = mapToUserDto(userModel);
         return userResponse;
 
     }
 
-    public List<UserResponse> allUsers(int pageNumber) {
+    private UserResponse mapToUserDto(UserModel userModel) {
+        return UserResponse.builder()
+        
+                .createdAt(userModel.getCreatedAt())
+                .email(userModel.getEmail())
+                .emailVerified(userModel.getEmailVerified())
+                .id(userModel.getId())
+                .fullName(userModel.getFullName())
+                .phone(userModel.getPhone())
+                .build();
+    }
 
-        System.out.println("called");    
-        return null;
+    public List<UserResponse> allUsers(int pageNumber) {
+        List<UserModel> users=userRepository.findAll();
+        if(users.isEmpty()){
+            return new ArrayList<>();
+
+        }  
+        return users.stream().map(e->mapToUserDto(e)).toList();
     }
 
 }

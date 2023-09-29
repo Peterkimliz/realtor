@@ -34,6 +34,7 @@ public class ExceptioAdvice {
     return new ResponseEntity<ExceptionObject>(exceptionObject,HttpStatus.BAD_REQUEST);
   }
 
+
   @ExceptionHandler(FoundException.class)  
   public ResponseEntity<ExceptionObject> foundException(FoundException exception){
     ExceptionObject exceptionObject=new ExceptionObject();

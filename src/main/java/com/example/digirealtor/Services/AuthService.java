@@ -65,7 +65,7 @@ public class AuthService {
 
         UserResponse userResponse = UserResponse.builder().createdAt(userModel.getCreatedAt())
                 .email(userModel.getEmail()).fullName(userModel.getFullName()).phone(userModel.getPhone())
-                .emailVerified(userModel.getEmailVerified()).build();
+                .emailVerified(userModel.getEmailVerified()).id(userModel.getId()).build();
         UserDetails userDetails = userDetailsImplementation.loadUserByUsername(userModel.getEmail());
         System.out.println(userDetails);
         String token = jwtService.buildToken(userDetails);

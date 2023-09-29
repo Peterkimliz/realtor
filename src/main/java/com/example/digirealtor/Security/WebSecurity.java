@@ -25,43 +25,51 @@ public class WebSecurity {
     UserDetailsImplementation userDetailsImplementation;
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter(){
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter(handlerExceptionResolver);
 
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
-        return
-                 httpSecurity
-                 .csrf()
-                 .disable()
-                 .authorizeHttpRequests()
-                 .requestMatchers("/api/v1/auth/**")
-                 .permitAll()
-                 .anyRequest()
-                 .authenticated()
-                 .and()
-                 .sessionManagement()
-                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                 .and()
-                 .authenticationProvider(authenticationProvider())
-                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                 
-                  .build();
+        return httpSecurity
+                .csrf(csrf -> csrf
+                        .disable())
+                .authorizeHttpRequests()
+                .requestMatchers(
+                        "/api/v1/auth/**",
+                        "/v2/api-docs",
+                        "/v3/api-docs",
+                        "/v3/api-docs/**",
+                        "/swagger-resources",
+                        "/swagger-resources/**",
+                        "/configuration/ui",
+                        "/configuration/security",
+                        "/swagger-ui/**",
+                        "/wejars/**",
+                        "/swagger-ui.html"
+
+                )
+                .permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .sessionManagement(management -> management
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+
+                .build();
     }
 
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
+        daoAuthenticationProvider.setUserDetailsService(userDetailsImplementation);
+        return daoAuthenticationProvider;
 
-@Bean
-public AuthenticationProvider authenticationProvider(){
-    DaoAuthenticationProvider daoAuthenticationProvider=new DaoAuthenticationProvider();
-    daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
-    daoAuthenticationProvider.setUserDetailsService(userDetailsImplementation);
-    return daoAuthenticationProvider;
+    }
 
-}
-
-  
-    
 }
