@@ -30,7 +30,7 @@ public class ProductDto {
     private List<String> images;
     @NotNull(message = "price quantity ")
     @Min(value = 1, message = "please enter valid quantity")
-    @NotBlank(message = "quantity required ")
+    @NotNull(message = "quantity required ")
     private int quantity;
     @NotBlank(message = "category required ")
     private String category;

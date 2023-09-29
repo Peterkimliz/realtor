@@ -33,7 +33,7 @@ public class JwtService {
 
     // extractAllClaims
     private Claims extractAllClaims(String token) {
-          System.out.println("token is "+token);
+    
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSignInKey())
@@ -61,10 +61,7 @@ public class JwtService {
 
     // check if toke n is valid
     public boolean isTokenValid(UserDetails userDetails, String token) {
-        System.out.println("called"+token);
-
-        String username = extractUsername(token);
-        System.out.println("decoding token"+username);
+         String username = extractUsername(token);
         return (userDetails.getUsername().equals(username) && !tokenExpired(token));
     }
 
