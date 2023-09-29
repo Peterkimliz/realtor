@@ -106,8 +106,14 @@ public class ProductService {
                 .build();
     }
 
-    public List<ProductDto> getProductByFilters() {
-        return null;
+    public List<ProductDto> getProductByFilters(String type, String category, int bedrooms, int bathrooms, int kitchens,
+            int startPrice, int endPrice) {
+
+        List<Product> products= productRepository.findAll();
+
+        return products.stream().map(e->mapProductToDto(e)).toList();
     }
+
+
 
 }

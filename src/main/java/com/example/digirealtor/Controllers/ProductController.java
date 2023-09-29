@@ -63,7 +63,7 @@ public class ProductController {
             @RequestParam(required = false) int startPrice,
             @RequestParam(required = false) int endPrice
             ) {
-        return new ResponseEntity<List<ProductDto>>(productService.getProductByFilters(), HttpStatus.CREATED);
+        return new ResponseEntity<List<ProductDto>>(productService.getProductByFilters(type,category,bedrooms,bathrooms,kitchens,startPrice,endPrice), HttpStatus.CREATED);
 
     }
 
