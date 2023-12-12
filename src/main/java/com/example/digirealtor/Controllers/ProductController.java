@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.digirealtor.Dtos.ProductDto;
-import com.example.digirealtor.Services.ProductService;
+import com.example.digirealtor.Services.PropertyService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -26,7 +26,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Products")
 public class ProductController {
     @Autowired
-    private ProductService productService;
+    private PropertyService productService;
 
     @PostMapping("/create/{userId}")
     public ResponseEntity<ProductDto> createProduct(@RequestBody @Validated ProductDto productDto,

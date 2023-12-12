@@ -10,9 +10,9 @@ import lombok.*;
 public class CategoryDto {
     @NotBlank(message = "name required")
     private String name;
-    
+
     @NotBlank(message = "type required")
     private String type;
     private String id;
-    
+
 }

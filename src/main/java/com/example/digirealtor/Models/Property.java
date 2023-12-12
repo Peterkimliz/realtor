@@ -15,16 +15,16 @@ import lombok.*;
 @Builder
 @Document(collection = "product")
 
-public class Product {
+public class Property {
     @Id
     private String id;
     @DocumentReference(lazy = true)
     private UserModel owner;
     private String name;
     private String description;
-    private int price;
+    private int rent;
+    private int security;
     private List<String> images;
-    private int quantity;
     private String category;
     private int bedRooms;
     private int bathRooms;
@@ -32,12 +32,17 @@ public class Product {
     private int roomSize;
     private int kitchens;
     @DocumentReference(lazy = true)
-    private List<Category>amenities;
+    private List<Category> utilities;
+    private List<Category> appliances;
+    private List<Category> floorCovering;
+    private List<Category> others;
     private Date createdAt;
     private String location;
     private String type;
     private boolean featured;
     private Boolean deleted;
 
-    
+    @DocumentReference(lazy = true)
+    private UserModel agent;
+
 }

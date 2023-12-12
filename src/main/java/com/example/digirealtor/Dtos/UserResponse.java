@@ -18,4 +18,5 @@ public class UserResponse {
     private String phone;
     private Date createdAt;
     private Boolean emailVerified;
+    
 }

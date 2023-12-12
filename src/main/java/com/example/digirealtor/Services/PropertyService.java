@@ -11,14 +11,14 @@ import com.example.digirealtor.Controllers.CategoryController;
 import com.example.digirealtor.Dtos.ProductDto;
 import com.example.digirealtor.Exceptions.NotFoundException;
 import com.example.digirealtor.Models.Category;
-import com.example.digirealtor.Models.Product;
+import com.example.digirealtor.Models.Property;
 import com.example.digirealtor.Models.UserModel;
 import com.example.digirealtor.Repositories.CategoryRepository;
 import com.example.digirealtor.Repositories.ProductRepository;
 import com.example.digirealtor.Repositories.UserRepository;
 
 @Service
-public class ProductService {
+public class PropertyService {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
@@ -37,14 +37,14 @@ public class ProductService {
             throw new NotFoundException("category with the id not found");
         }
 
-        Product product = mapToProduct(productDto, user.get());
+        Property product = mapToProduct(productDto, user.get());
         productRepository.save(product);
         productDto.setId(product.getId());
         return productDto;
     }
 
     public ProductDto getProductById(String id) {
-        Optional<Product> foundProduct = productRepository.findById(id);
+        Optional<Property> foundProduct = productRepository.findById(id);
         if (!foundProduct.isPresent()) {
             throw new NotFoundException("product with the id not found");
         }
@@ -52,26 +52,26 @@ public class ProductService {
     }
 
     public ProductDto updateProductById(ProductDto productDto, String id) {
-        Optional<Product> foundProduct = productRepository.findById(id);
+        Optional<Property> foundProduct = productRepository.findById(id);
         if (!foundProduct.isPresent()) {
             throw new NotFoundException("product with the id not found");
         }
-        Product product = mapToProduct(productDto, foundProduct.get().getOwner());
+        Property product = mapToProduct(productDto, foundProduct.get().getOwner());
         productRepository.save(product);
         return mapProductToDto(product);
     }
 
     public void deleteProduct(String id) {
-        Optional<Product> foundProduct = productRepository.findById(id);
+        Optional<Property> foundProduct = productRepository.findById(id);
         if (!foundProduct.isPresent()||!foundProduct.get().getDeleted()==true) {
             throw new NotFoundException("product with the id not found");
         }
-        Product product = foundProduct.get();
+        Property product = foundProduct.get();
         product.setDeleted(true);
         productRepository.save(product);
     }
 
-    private ProductDto mapProductToDto(Product product) {
+    private ProductDto mapProductToDto(Property product) {
         return ProductDto.builder()
                 .amenities(product.getAmenities())
                 .balconies(product.getBalconies())
@@ -92,8 +92,8 @@ public class ProductService {
                 .build();
     }
 
-    private Product mapToProduct(ProductDto productDto, UserModel owner) {
-        return Product.builder()
+    private Property mapToProduct(ProductDto productDto, UserModel owner) {
+        return Property.builder()
                 .createdAt(new Date(System.currentTimeMillis()))
                 .amenities(productDto.getAmenities())
                 .balconies(productDto.getBalconies())
@@ -118,7 +118,7 @@ public class ProductService {
     public List<ProductDto> getProductByFilters(String type, String category, int bedrooms, int bathrooms, int kitchens,
             int startPrice, int endPrice) {
 
-        List<Product> products= productRepository.findAll();
+        List<Property> products= productRepository.findAll();
 
         return products.stream().map(e->mapProductToDto(e)).toList();
     }
