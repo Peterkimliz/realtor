@@ -1,9 +1,13 @@
 package com.example.digirealtor.Services;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import com.example.digirealtor.Dtos.PropertyDto;
 import com.example.digirealtor.Dtos.PropertyRequestDto;
@@ -20,15 +24,16 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class PropertyService {
-    
+
     private final ProductRepository productRepository;
-    
+
     private final UserRepository userRepository;
-    
+
     private final CategoryRepository categoryRepository;
+    private final MongoTemplate mongoTemplate;
 
     public PropertyDto createProperty(PropertyRequestDto productDto, String ownerId) {
-    
+
         Optional<UserModel> user = userRepository.findById(ownerId);
         Optional<Category> category = categoryRepository.findById(productDto.getCategory());
 
@@ -41,7 +46,7 @@ public class PropertyService {
 
         Property product = mapToProduct(productDto, user.get());
         productRepository.save(product);
-      
+
         return mapProductToDto(product);
     }
 
@@ -124,23 +129,30 @@ public class PropertyService {
                 .build();
     }
 
-   
-
     private List<Category> getCategoryById(List<String> utilities) {
-        System.out.println("mmmmmh" +utilities);
-            List <Category> cats=categoryRepository.findAllById(utilities);
-            System.out.println(cats);
-        
+        System.out.println("mmmmmh" + utilities);
+        List<Category> cats = categoryRepository.findAllById(utilities);
+        System.out.println(cats);
+
         return cats;
     }
 
-    public List<PropertyDto> getProductByFilters() {
-        System.out.println("Called");
-        List<Property> products= productRepository.findAll();
-        return products.stream().map(e->mapProductToDto(e)).toList();
-       
+    public List<PropertyDto> getProductByFilters(String landlord) {
+        List<Property> products = new ArrayList<Property>();
+
+        if (landlord != null) {
+            Query query=new Query();
+            query.addCriteria(Criteria.where("owner.id").is(landlord));
+
+            products= mongoTemplate.find(query,Property.class);
+            // products=productRepository.findByOwner(landlord);
+
+        } else {
+            products = productRepository.findAll();
+        }
+
+        return products.stream().map(e -> mapProductToDto(e)).toList();
+
     }
-
-
 
 }

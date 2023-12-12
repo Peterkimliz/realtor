@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.digirealtor.Dtos.PropertyDto;
@@ -57,7 +58,7 @@ public class PropertyController {
 
     @GetMapping("/all")
     public ResponseEntity<List<PropertyDto>> getAllProperties(
-            //        @RequestParam(required = false) String type,
+                   @RequestParam(required = false) String landlord
             // @RequestParam(required = false) String category,
             // @RequestParam(required = false) int bedrooms,
             // @RequestParam(required = false) int bathrooms,
@@ -65,8 +66,8 @@ public class PropertyController {
             // @RequestParam(required = false) int startPrice,
             // @RequestParam(required = false) int endPrice
             ) {
-                System.out.println("fghjkl");
-        return new ResponseEntity<List<PropertyDto>>(productService.getProductByFilters(), HttpStatus.OK);
+        
+        return new ResponseEntity<List<PropertyDto>>(productService.getProductByFilters(landlord), HttpStatus.OK);
 
     }
 

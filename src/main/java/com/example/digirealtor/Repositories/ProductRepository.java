@@ -7,5 +7,6 @@ import com.example.digirealtor.Models.Property;
 
 @Repository
 public interface ProductRepository extends MongoRepository<Property,String>{
+
     
 }
