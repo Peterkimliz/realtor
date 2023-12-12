@@ -65,9 +65,20 @@ public class CategoryService {
 
     }
 
-    public List<CategoryDto> getAllCategories(String type) {
+    public List<CategoryDto> getCategoriesByType(String type) {
     
         List<Category> categories = categoryRepository.findByType(type);
+        if (categories.size() > 0) {
+            return categories.stream().map(e -> CategoryDto.builder().id(e.getId()).name(e.getName()).type(e.getType()).build()).toList();
+
+        } else {
+            return new ArrayList<>();
+        }
+
+    }
+    public List<CategoryDto> getAllCategories() {
+    
+        List<Category> categories = categoryRepository.findAll();
         if (categories.size() > 0) {
             return categories.stream().map(e -> CategoryDto.builder().id(e.getId()).name(e.getName()).type(e.getType()).build()).toList();
 

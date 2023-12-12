@@ -52,8 +52,14 @@ public class CategoryController {
  
 
     @GetMapping("/all/{type}")
-    public ResponseEntity<List<CategoryDto>> getAllCategory(@PathVariable("type") String type) {
-        return new ResponseEntity<List<CategoryDto>>(categoryService.getAllCategories(type), HttpStatus.CREATED);
+    public ResponseEntity<List<CategoryDto>> getCategoriesByType(@PathVariable("type") String type) {
+        return new ResponseEntity<List<CategoryDto>>(categoryService.getCategoriesByType(type), HttpStatus.CREATED);
+
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<CategoryDto>> getAllCategies() {
+        return new ResponseEntity<List<CategoryDto>>(categoryService.getAllCategories(), HttpStatus.CREATED);
 
     }
 

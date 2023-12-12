@@ -24,6 +24,9 @@ public class UserModel {
     @JsonIgnore
     private String password;
     private Date createdAt;
+    @Builder.Default
     private Boolean emailVerified=false;
     private String type;
+    @JsonIgnore
+    private String propertyId;
 }

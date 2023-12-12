@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springdoc.core.converters.models.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -40,6 +39,7 @@ public class UserService {
                 .id(userModel.getId())
                 .fullName(userModel.getFullName())
                 .phone(userModel.getPhone())
+                .type(userModel.getType())
                 .build();
     }
 

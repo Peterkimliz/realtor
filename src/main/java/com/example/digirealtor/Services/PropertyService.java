@@ -4,11 +4,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.example.digirealtor.Controllers.CategoryController;
-import com.example.digirealtor.Dtos.ProductDto;
+import com.example.digirealtor.Dtos.PropertyDto;
+import com.example.digirealtor.Dtos.PropertyRequestDto;
 import com.example.digirealtor.Exceptions.NotFoundException;
 import com.example.digirealtor.Models.Category;
 import com.example.digirealtor.Models.Property;
@@ -17,16 +15,20 @@ import com.example.digirealtor.Repositories.CategoryRepository;
 import com.example.digirealtor.Repositories.ProductRepository;
 import com.example.digirealtor.Repositories.UserRepository;
 
-@Service
-public class PropertyService {
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private CategoryRepository categoryRepository;
+import lombok.RequiredArgsConstructor;
 
-    public ProductDto createProduct(ProductDto productDto, String ownerId) {
+@Service
+@RequiredArgsConstructor
+public class PropertyService {
+    
+    private final ProductRepository productRepository;
+    
+    private final UserRepository userRepository;
+    
+    private final CategoryRepository categoryRepository;
+
+    public PropertyDto createProperty(PropertyRequestDto productDto, String ownerId) {
+    
         Optional<UserModel> user = userRepository.findById(ownerId);
         Optional<Category> category = categoryRepository.findById(productDto.getCategory());
 
@@ -39,11 +41,11 @@ public class PropertyService {
 
         Property product = mapToProduct(productDto, user.get());
         productRepository.save(product);
-        productDto.setId(product.getId());
-        return productDto;
+      
+        return mapProductToDto(product);
     }
 
-    public ProductDto getProductById(String id) {
+    public PropertyDto getProductById(String id) {
         Optional<Property> foundProduct = productRepository.findById(id);
         if (!foundProduct.isPresent()) {
             throw new NotFoundException("product with the id not found");
@@ -51,7 +53,7 @@ public class PropertyService {
         return mapProductToDto(foundProduct.get());
     }
 
-    public ProductDto updateProductById(ProductDto productDto, String id) {
+    public PropertyDto updateProductById(PropertyRequestDto productDto, String id) {
         Optional<Property> foundProduct = productRepository.findById(id);
         if (!foundProduct.isPresent()) {
             throw new NotFoundException("product with the id not found");
@@ -63,17 +65,21 @@ public class PropertyService {
 
     public void deleteProduct(String id) {
         Optional<Property> foundProduct = productRepository.findById(id);
-        if (!foundProduct.isPresent()||!foundProduct.get().getDeleted()==true) {
+        if (!foundProduct.isPresent()) {
             throw new NotFoundException("product with the id not found");
         }
-        Property product = foundProduct.get();
-        product.setDeleted(true);
-        productRepository.save(product);
+        productRepository.deleteById(id);
+        // Property product = foundProduct.get();
+        // product.setDeleted(true);
+        // productRepository.save(product);
     }
 
-    private ProductDto mapProductToDto(Property product) {
-        return ProductDto.builder()
-                .amenities(product.getAmenities())
+    private PropertyDto mapProductToDto(Property product) {
+        return PropertyDto.builder()
+                .utilities(product.getUtilities())
+                .floorCovering(product.getFloorCovering())
+                .other(product.getOthers())
+                .appliances(product.getAppliances())
                 .balconies(product.getBalconies())
                 .bathRooms(product.getBathRooms())
                 .bedRooms(product.getBedRooms())
@@ -84,18 +90,21 @@ public class PropertyService {
                 .kitchens(product.getKitchens())
                 .location(product.getLocation())
                 .name(product.getName())
-                .price(product.getPrice())
-                .quantity(product.getQuantity())
+                .rent(product.getRent())
+                .security(product.getSecurity())
                 .roomSize(product.getRoomSize())
                 .type(product.getType())
-
+                .owner(product.getOwner())
                 .build();
     }
 
-    private Property mapToProduct(ProductDto productDto, UserModel owner) {
+    private Property mapToProduct(PropertyRequestDto productDto, UserModel owner) {
         return Property.builder()
                 .createdAt(new Date(System.currentTimeMillis()))
-                .amenities(productDto.getAmenities())
+                .utilities(getCategoryById(productDto.getUtilitiesList()))
+                .appliances(getCategoryById(productDto.getAppliancesList()))
+                .floorCovering(getCategoryById(productDto.getFloorCoveringList()))
+                .others(getCategoryById(productDto.getOtherList()))
                 .balconies(productDto.getBalconies())
                 .bathRooms(productDto.getBathRooms())
                 .bedRooms(productDto.getBedRooms())
@@ -106,8 +115,8 @@ public class PropertyService {
                 .kitchens(productDto.getKitchens())
                 .location(productDto.getLocation())
                 .name(productDto.getName())
-                .price(productDto.getPrice())
-                .quantity(productDto.getQuantity())
+                .rent(productDto.getRent())
+                .security(productDto.getSecurity())
                 .type(productDto.getType())
                 .roomSize(productDto.getRoomSize())
                 .owner(owner)
@@ -115,12 +124,21 @@ public class PropertyService {
                 .build();
     }
 
-    public List<ProductDto> getProductByFilters(String type, String category, int bedrooms, int bathrooms, int kitchens,
-            int startPrice, int endPrice) {
+   
 
+    private List<Category> getCategoryById(List<String> utilities) {
+        System.out.println("mmmmmh" +utilities);
+            List <Category> cats=categoryRepository.findAllById(utilities);
+            System.out.println(cats);
+        
+        return cats;
+    }
+
+    public List<PropertyDto> getProductByFilters() {
+        System.out.println("Called");
         List<Property> products= productRepository.findAll();
-
         return products.stream().map(e->mapProductToDto(e)).toList();
+       
     }
 
 

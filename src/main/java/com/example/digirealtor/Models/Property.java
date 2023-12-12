@@ -1,5 +1,6 @@
 package com.example.digirealtor.Models;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Document(collection = "product")
+@Document(collection = "property")
 
 public class Property {
     @Id
@@ -28,20 +29,28 @@ public class Property {
     private String category;
     private int bedRooms;
     private int bathRooms;
-    private int balconies;
+    @Builder.Default
+    private int balconies = 0;
     private int roomSize;
-    private int kitchens;
+    @Builder.Default
+    private int kitchens = 0;
     @DocumentReference(lazy = true)
-    private List<Category> utilities;
-    private List<Category> appliances;
-    private List<Category> floorCovering;
-    private List<Category> others;
+    @Builder.Default
+    private List<Category> utilities = new ArrayList<>();
+    @DocumentReference(lazy = true)
+    @Builder.Default
+    private List<Category> appliances = new ArrayList<>();
+    @DocumentReference(lazy = true)
+    @Builder.Default
+    private List<Category> floorCovering = new ArrayList<>();
+    @DocumentReference(lazy = true)
+    @Builder.Default
+    private List<Category> others = new ArrayList<>();
     private Date createdAt;
     private String location;
     private String type;
     private boolean featured;
     private Boolean deleted;
-
     @DocumentReference(lazy = true)
     private UserModel agent;
 
