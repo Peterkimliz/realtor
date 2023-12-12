@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -139,14 +141,10 @@ public class PropertyService {
 
     public List<PropertyDto> getProductByFilters(String landlord) {
         List<Property> products = new ArrayList<Property>();
-
+        Query query = new Query();
         if (landlord != null) {
-            Query query=new Query();
-            query.addCriteria(Criteria.where("owner.id").is(landlord));
-
-            products= mongoTemplate.find(query,Property.class);
-            // products=productRepository.findByOwner(landlord);
-
+            query.addCriteria(Criteria.where("owner.id").is(landlord)).with(PageRequest.of(0, 1));
+            products = mongoTemplate.find(query, Property.class);
         } else {
             products = productRepository.findAll();
         }
