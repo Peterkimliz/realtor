@@ -18,7 +18,7 @@ import com.example.digirealtor.Models.Category;
 import com.example.digirealtor.Models.Property;
 import com.example.digirealtor.Models.UserModel;
 import com.example.digirealtor.Repositories.CategoryRepository;
-import com.example.digirealtor.Repositories.ProductRepository;
+import com.example.digirealtor.Repositories.PropertyRepository;
 import com.example.digirealtor.Repositories.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PropertyService {
 
-    private final ProductRepository productRepository;
+    private final PropertyRepository productRepository;
 
     private final UserRepository userRepository;
 

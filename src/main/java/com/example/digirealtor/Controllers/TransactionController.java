@@ -36,12 +36,14 @@ public class TransactionController {
     }
     @GetMapping("/all/{tenantId}")
     public ResponseEntity<List<TransactinResponseDto>> getTransactionByTenantId( @PathVariable("tenantId") String tenantId) {
+        System.out.println("kjoikop;kpo;lkpo;lkop;lkp;okop;l");
         return new ResponseEntity<List<TransactinResponseDto>>(transactionService.getTransactionByTenantId(tenantId), HttpStatus.OK);
 
     }
-    @GetMapping("/all/{propertyId}")
-    public ResponseEntity<List<AnalysisDto>> getTransactionforProperty( @PathVariable("propertyId") String propertyId) {
-        return new ResponseEntity<List<AnalysisDto>>(transactionService.getTransactionforProperty(propertyId), HttpStatus.OK);
+    @GetMapping("/all/{ownerId}")
+    public ResponseEntity<List<AnalysisDto>> getTransactionforProperty( @PathVariable("ownerId") String ownerId) {
+        System.out.println("mhhhh");
+        return new ResponseEntity<List<AnalysisDto>>(transactionService.getTransactionforProperty(ownerId), HttpStatus.OK);
 
     }
 

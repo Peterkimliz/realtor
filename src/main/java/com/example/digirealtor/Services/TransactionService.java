@@ -12,8 +12,10 @@ import com.example.digirealtor.Dtos.AnalysisDto;
 import com.example.digirealtor.Dtos.TransactinResponseDto;
 import com.example.digirealtor.Dtos.TransactionRequestDto;
 import com.example.digirealtor.Exceptions.NotFoundException;
+import com.example.digirealtor.Models.Property;
 import com.example.digirealtor.Models.Tenant;
 import com.example.digirealtor.Models.Transaction;
+import com.example.digirealtor.Repositories.PropertyRepository;
 import com.example.digirealtor.Repositories.TenantRepository;
 import com.example.digirealtor.Repositories.TransactionRepository;
 
@@ -24,18 +26,22 @@ public class TransactionService {
     TransactionRepository transactionRepository;
     @Autowired
     TenantRepository tenantRepository;
+    @Autowired
+    PropertyRepository propertyRepository;
 
     public TransactinResponseDto createTransaction(TransactionRequestDto transactionDto, String tenantId) {
          Optional<Tenant> tenant = tenantRepository.findById(tenantId);
         if (!tenant.isPresent()) {
             throw new NotFoundException("Tenant not found in the system");
         }
+        Property pOptional=propertyRepository.findById(transactionDto.getPropertyId()).get();
 
         Transaction transaction = Transaction.builder().amount(transactionDto.getAmount())
                 .createdAt(new Date(System.currentTimeMillis()))
                 .propertyId(transactionDto.getPropertyId())
                 .transactionId(transactionDto.getTransactionId())
                 .tenant(tenant.get())
+                .owner(pOptional.getOwner().getId())
                 .build();
         transactionRepository.save(transaction);
 
@@ -62,7 +68,10 @@ public class TransactionService {
 
     }
 
-    public List<AnalysisDto> getTransactionforProperty(String propertyId) {
+    public List<AnalysisDto> getTransactionforProperty(String ownerId) {
+         List<Transaction> transactions = transactionRepository.findByOwner(ownerId);
+         System.out.println("transactions" +transactions);
+
         return null;
     }
 

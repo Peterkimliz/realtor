@@ -26,5 +26,6 @@ public class Transaction {
   private Tenant tenant;
   private String propertyId;
   private String transactionId;
+  private String owner;
     
 }

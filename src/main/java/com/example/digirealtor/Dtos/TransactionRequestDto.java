@@ -1,9 +1,5 @@
 package com.example.digirealtor.Dtos;
 
-import java.util.Date;
-
-import com.example.digirealtor.Models.Tenant;
-
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.example.digirealtor.Models.Property;
 
 @Repository
-public interface ProductRepository extends MongoRepository<Property,String>{
+public interface PropertyRepository extends MongoRepository<Property,String>{
 
     
 }
