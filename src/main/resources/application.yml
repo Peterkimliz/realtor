@@ -1,6 +1,6 @@
 spring:
   data:
     mongodb:
-      # uri: mongodb+srv://peterkimani:kimani89@cluster0.l6ma0.mongodb.net/?retryWrites=true&w=majority
-      # database: digirealtor
-      uri: mongodb://localhost:27017/digirealtor 
+      uri: mongodb+srv://peterkimani:kimani89@cluster0.l6ma0.mongodb.net/?retryWrites=true&w=majority
+      database: digirealtor
+      # uri: mongodb://localhost:27017/digirealtor 
