@@ -46,6 +46,11 @@ public ResponseEntity<PropertyCategoryResponse> addSubCategoryToPropertyCategory
     return new ResponseEntity<PropertyCategoryResponse>(propertyCategoryService.updatePropertyCategory(propertyId,subcategoryId),HttpStatus.OK);
 
 }
+@PutMapping("/removesubcategory/{propertyId}")
+public ResponseEntity<PropertyCategoryResponse> removeSubCategoryToPropertyCategory(@PathVariable("propertyId") String propertyId,@RequestParam(required = true) String subcategoryId){
+    return new ResponseEntity<PropertyCategoryResponse>(propertyCategoryService.removesubcategoryFromCategory(propertyId,subcategoryId),HttpStatus.OK);
+
+}
 
     
 }

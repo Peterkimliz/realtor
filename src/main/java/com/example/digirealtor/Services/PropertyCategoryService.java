@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -82,6 +83,34 @@ public class PropertyCategoryService {
         categories.add(pCOptional.get());
         propertyCategory.setCategories(categories);
         propertyCategoryRepository.save(propertyCategory);
+        return PropertyCategoryResponse.builder()
+                .createdAt(propertyCategory.getCreatedAt())
+                .id(propertyCategory.getId())
+                .categoryDto(propertyCategory.getCategories().stream().map(j -> CategoryDto.builder()
+                        .id(j.getId())
+                        .name(j.getName())
+                        .type(j.getType())
+                        .build()).toList())
+
+                .name(propertyCategory.getName())
+                .build();
+    }
+
+    public PropertyCategoryResponse removesubcategoryFromCategory(String propertyId, String subcategoryId) {
+        Optional<PropertyCategory> prOptional = propertyCategoryRepository.findById(propertyId);
+        if (!prOptional.isPresent()) {
+            throw new NotFoundException("Property with id not found");
+        }
+    
+        boolean isPresent = prOptional.get().getCategories().stream().anyMatch(e -> e.getId().equals(subcategoryId));
+        if (isPresent == false) {
+            throw new FoundException("Sub category doesnot exists in this property");
+        }
+        PropertyCategory propertyCategory = prOptional.get();
+        List<Category> categories = propertyCategory.getCategories().stream().filter(e->!e.getId().equals(subcategoryId)).toList();
+        propertyCategory.setCategories(categories);
+        propertyCategoryRepository.save(propertyCategory);
+
         return PropertyCategoryResponse.builder()
                 .createdAt(propertyCategory.getCreatedAt())
                 .id(propertyCategory.getId())
