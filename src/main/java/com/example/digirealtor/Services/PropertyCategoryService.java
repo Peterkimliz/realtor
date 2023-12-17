@@ -1,11 +1,14 @@
 package com.example.digirealtor.Services;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.digirealtor.Dtos.CategoryDto;
 import com.example.digirealtor.Dtos.PropertyCategoryRequestDto;
 import com.example.digirealtor.Dtos.PropertyCategoryResponse;
 import com.example.digirealtor.Exceptions.FoundException;
@@ -33,6 +36,26 @@ public class PropertyCategoryService {
                 .createdAt(propertyCategory.getCreatedAt()).build();
     }
 
+    public List<PropertyCategoryResponse> getAllPropertyCategories() {
 
+        List<PropertyCategory> propertyCategories = propertyCategoryRepository.findAll();
+        if (propertyCategories.size() > 0) {
+            return propertyCategories.stream()
+                    .map(e -> PropertyCategoryResponse.builder()
+                            .createdAt(e.getCreatedAt())
+                            .id(e.getId())
+                            .name(e.getName())
+                            .categoryDto(e.getCategories().stream().map(j -> CategoryDto.builder()
+                                    .id(j.getId())
+                                    .name(j.getName())
+                                    .type(j.getType())
+                                    .build()).toList())
+                            .build())
+                    .toList();
+
+        } else {
+            return new ArrayList<>();
+        }
+    }
 
 }
