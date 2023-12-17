@@ -7,19 +7,19 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(collection = "PropertyCategory")
+@Builder
 public class PropertyCategory {
     @Id
     private String id;
     private String name;
     private Date createdAt;
+    @Builder.Default
     private List<Category> categories=new ArrayList<>();
 
     
