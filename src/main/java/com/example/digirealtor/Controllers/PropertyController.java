@@ -1,6 +1,7 @@
 package com.example.digirealtor.Controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.digirealtor.Dtos.PropertyDto;
 import com.example.digirealtor.Dtos.PropertyRequestDto;
+import com.example.digirealtor.Models.Property;
 import com.example.digirealtor.Services.PropertyService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,7 +34,7 @@ public class PropertyController {
     @PostMapping("/create/{userId}")
     public ResponseEntity<PropertyDto> createProduct(@RequestBody @Validated PropertyRequestDto productDto,
             @PathVariable("userId") String userId) {
-                System.out.println("hello");
+        System.out.println("hello");
         return new ResponseEntity<PropertyDto>(productService.createProperty(productDto, userId), HttpStatus.CREATED);
 
     }
@@ -44,7 +46,8 @@ public class PropertyController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<PropertyDto> getCategory(@RequestBody PropertyRequestDto productDto, @PathVariable("id") String id) {
+    public ResponseEntity<PropertyDto> getCategory(@RequestBody PropertyRequestDto productDto,
+            @PathVariable("id") String id) {
         return new ResponseEntity<PropertyDto>(productService.updateProductById(productDto, id), HttpStatus.OK);
 
     }
@@ -58,16 +61,27 @@ public class PropertyController {
 
     @GetMapping("/all")
     public ResponseEntity<List<PropertyDto>> getAllProperties(
-                   @RequestParam(required = false) String landlord
-            // @RequestParam(required = false) String category,
-            // @RequestParam(required = false) int bedrooms,
-            // @RequestParam(required = false) int bathrooms,
-            // @RequestParam(required = false) int kitchens,
-            // @RequestParam(required = false) int startPrice,
-            // @RequestParam(required = false) int endPrice
-            ) {
-        
+            @RequestParam(required = false) String landlord
+    // @RequestParam(required = false) String category,
+    // @RequestParam(required = false) int bedrooms,
+    // @RequestParam(required = false) int bathrooms,
+    // @RequestParam(required = false) int kitchens,
+    // @RequestParam(required = false) int startPrice,
+    // @RequestParam(required = false) int endPrice
+    ) {
+
         return new ResponseEntity<List<PropertyDto>>(productService.getProductByFilters(landlord), HttpStatus.OK);
+
+    }
+
+    @GetMapping("/bymonth")
+    public ResponseEntity<Map<String, List<Property>>> getAllPropertiesByMonnth(
+            @RequestParam(required = false) String landlord
+
+    ) {
+
+        return new ResponseEntity<Map<String, List<Property>>>(productService.getProductByMonths(landlord),
+                HttpStatus.OK);
 
     }
 
